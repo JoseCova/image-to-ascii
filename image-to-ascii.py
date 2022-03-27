@@ -28,7 +28,7 @@ def main_game() -> None:
     screen, clock = setup_pygame()
     fps = 60
 
-    screen.fill(0, 0, 0)
+    screen.fill((0, 0, 0))
     pygame.display.update()
     clock.tick(fps)
 
