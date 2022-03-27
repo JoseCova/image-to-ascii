@@ -30,7 +30,13 @@ def get_scaled_image() -> Any:
 
     return pygame.transform.scale(image,(int(img_width), int(img_height)))
 
+def map_to_range(value, from_x, from_y, to_x, to_y):
+    """Map the given value.
 
+        Given the mean value calculate the corresponding index
+        in the ascii_chars
+    """
+    return value * (to_y - to_x ) / (from_y - from_x)
 
 def main_game() -> None:
     """Execute the program logic."""
@@ -39,6 +45,8 @@ def main_game() -> None:
     fps = 60
 
     IMAGE = get_scaled_image()
+
+    ascii_chars = "_.,-=+:;cba|?0123456789$W#@"
 
 
     screen.fill((0, 0, 0))
