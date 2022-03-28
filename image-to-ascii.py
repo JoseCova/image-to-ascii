@@ -10,6 +10,7 @@ def setup_pygame() -> Tuple[Any, Any]:
 
     Return the screen and clock to be used by the main game function
     """
+    pygame.init()
 
     screen_width = 1280
     screen_height = 720
@@ -25,8 +26,8 @@ def setup_pygame() -> Tuple[Any, Any]:
 def get_scaled_image() -> Any:
     """Scale the loaded image."""
 
-    image = pygame.image.load("image/amogus.jpg")
-    img_width, img_height = image.get_width() * 0.7, image.get_height() * 0.7
+    image = pygame.image.load("image/jg.jpg")
+    img_width, img_height = image.get_width() * 0.08, image.get_height() * 0.08
 
     return pygame.transform.scale(image,(int(img_width), int(img_height)))
 
@@ -38,6 +39,39 @@ def map_to_range(value, from_x, from_y, to_x, to_y):
     """
     return value * (to_y - to_x ) / (from_y - from_x)
 
+
+def text(msg, size=15):
+    """Render text. """
+    return pygame.font.SysFont("consolas", size).render(msg, True, (255,255,255))   
+
+
+def image_to_ascii(image, screen):
+    """Convert the image to ascii."""
+
+    ascii_chars = "_.,-=+:;cba|?0123456789$W#@"
+
+    # The rest of this comment is the video explanation
+
+    image.lock()
+
+    # iterate through image as a matrix
+    for i in range(image.get_width()):
+        for j in range(image.get_height()):
+            r, g, b, _ = image.get_at([i,j])
+            average = (r + g + b) // 3
+            index = round(map_to_range(average, 0, 255, 0, len(ascii_chars) - 1))
+
+            # Create text surface for the character
+            ascii_char = text(ascii_chars[index])
+            screen.blit(ascii_char, (i*15, j*15))
+
+            #pdate screen everytime we blit
+            pygame.display.update()
+
+
+    image.unlock()
+
+
 def main_game() -> None:
     """Execute the program logic."""
 
@@ -46,11 +80,9 @@ def main_game() -> None:
 
     IMAGE = get_scaled_image()
 
-    ascii_chars = "_.,-=+:;cba|?0123456789$W#@"
-
-
     screen.fill((0, 0, 0))
-    screen.blit(IMAGE, (0,0))
+
+    image_to_ascii(IMAGE, screen)
 
     pygame.display.update()
     clock.tick(fps)
